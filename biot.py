@@ -65,8 +65,9 @@ class BIoT:
         
         print("Callback to " + callback.__name__ + " registered on " + param + " change")
 
-    def setState(self,param,value):
-        pass
+    def setState(self,id,param,value):
+		message = { 'id' : id, 'param' : param, 'value' : value }
+		self.IO.emit("device:set:state", message)
         
     def getState(self,param):
         pass
