@@ -7,7 +7,7 @@ class BIoT:
 
     connected = False
 
-    def __init__(self, host = False, port = False):       
+    def __init__(self, host = False, port = False,params = {}):       
         
 
         self.connected = False
@@ -23,7 +23,7 @@ class BIoT:
         else:
             print(APP_NAME + " : Trying to connect " + host + " via port " + str(port) )
             
-            self.IO = SocketIO(host,port,LoggingNamespace)
+            self.IO = SocketIO(host,port,params = params)
             self.IO.on('connect',self.on_connect)
             self.IO.on('disconnect',self.on_disconnect)
             self.IO.on('param:change',self.param_change)
@@ -40,11 +40,10 @@ class BIoT:
         print(APP_NAME + ' : Trying to Reconnect')
 
     def param_change(self,device):
-
         for device_id, params in self.param_call.items():
             for key, function in params.items():
                 print(dict(device))
-                if device['id'] == device_id and device['param'] == key:
+                if device['id'] == int(device_id) and device['param'].encode("utf-8") == key:
                     self.param_functions[device_id][key](device['value'])
         
             
